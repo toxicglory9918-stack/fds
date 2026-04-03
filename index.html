@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudflare Test</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f4f4f9; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        #response { margin-top: 1rem; color: #555; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Cloudflare Connector</h1>
+        <button onclick="testConnection()">Test Backend Connection</button>
+        <div id="response">Click the button to fetch data...</div>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const statusDiv = document.getElementById('response');
+            statusDiv.innerText = "Connecting...";
+
+            try {
+                // REPLACE THIS URL WITH YOUR WORKER URL
+                const workerUrl = "https://your-worker-name.your-subdomain.workers.dev";
+                
+                const response = await fetch(workerUrl);
+                const data = await response.json();
+
+                statusDiv.innerHTML = `
+                    <p style="color: green;"><strong>Success!</strong></p>
+                    <p>${data.message}</p>
+                    <small>Server Time: ${data.serverTime}</small>
+                `;
+            } catch (error) {
+                statusDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
